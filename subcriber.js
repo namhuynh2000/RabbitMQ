@@ -18,12 +18,30 @@ amqp.connect("amqp://localhost", function (error0, connection) {
           throw error2;
         }
         var correlationId = generateUuid();
-        var name = {
-          title: "film naruto",
-          language_id: 1,
-        };
+        var requestCreate = {
+          type: 'create',
+          entity: {
+            title: 'New Film',
+            description: 'This is a New Film',
+            language_id: 1
+          }
+        }
+        var requestRead = {
+          type: 'read',
+        }
+        var requestUpdate = {
+          type: 'update',
+          entity: {
+            film_id: 1010,
+            title: 'New Film Update',
+          }
+        }
+        var requestDelete = {
+          type: 'delete',
+          film_id: 1009
+        }
 
-        console.log(" [x] Requesting ", name);
+        console.log(" [x] Requesting ", requestCreate);
 
         channel.consume(
           q.queue,
@@ -41,7 +59,7 @@ amqp.connect("amqp://localhost", function (error0, connection) {
           // }
         );
 
-        channel.sendToQueue("rpc_queue", Buffer.from(JSON.stringify(name)), {
+        channel.sendToQueue("rpc_queue", Buffer.from(JSON.stringify(requestCreate)), {
           correlationId: correlationId,
           replyTo: q.queue,
         });

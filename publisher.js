@@ -10,8 +10,25 @@ rabbitmq
       const req = JSON.parse(msg.content);
 
       //   Handle request here
-      console.log("abc");
       console.log(req);
+      var { type } = req;
+      console.log("type: ", type);
+      switch (type) {
+        case 'create':
+          CRUD().Create(req.entity);
+          break;
+        case 'read':
+          CRUD().Read();
+          break;
+        case 'update':
+          CRUD().Update(req.film_id, req.entity);
+          break;
+        case 'delete':
+          CRUD().Delete(req.film_id);
+          break;
+        default:
+          throw new Error('No valid type');
+      }
 
       //   Send response
       channel.sendToQueue(msg.properties.replyTo, Buffer.from("success"), {
