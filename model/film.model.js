@@ -11,11 +11,11 @@ export default function CRUD() {
       },
 
       async Update(id, entity){
-          return await database('film').where({film_id: id}).update(entity);
+          return await database('film').where('film_id', id).update(entity);
       },
 
       async Delete(id){
-          return await database('film').where({film_id: id}).del();
+          return await database('film').where('film_id', id).del();
       }
   }
 }

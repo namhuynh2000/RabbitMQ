@@ -2,21 +2,18 @@ import amqp from "amqplib";
 
 // const connection =  amqp.connect('amqp://localhost');
 
-async function connection() {
+async function connection(queue, config) {
   try {
     const conn = await amqp.connect("amqp://localhost?heartbeat=5s");
     const ch = await conn.createChannel();
-    const q = await ch.assertQueue("rpc_queue", {
-      exclusive: true,
-    });
+    const q = await ch.assertQueue(queue, config);
     return {
       channel: ch,
       queue: q.queue,
     };
   } catch (e) {
     console.log(e);
-    return e;
   }
 }
 
-export default connection();
+export default connection;

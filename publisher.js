@@ -1,11 +1,10 @@
 import rabbitmq from "./connection/rabbitmq/amqp.js";
-// import { Create } from "./model.js";
+import CRUD from "./model/film.model.js";
 
-rabbitmq
+rabbitmq('rpc_queue', { durable: false })
   .then(async (value) => {
     const { channel, queue } = value;
 
-    channel.prefetch(1);
     channel.consume(queue, function reply(msg) {
       const req = JSON.parse(msg.content);
 
@@ -29,13 +28,14 @@ rabbitmq
         default:
           throw new Error('No valid type');
       }
+      channel.ack(msg);
 
       //   Send response
       channel.sendToQueue(msg.properties.replyTo, Buffer.from("success"), {
         correlationId: msg.properties.correlationId,
       });
-
-      channel.ack(msg);
     });
+
+
   })
   .catch((e) => console.log(e));
