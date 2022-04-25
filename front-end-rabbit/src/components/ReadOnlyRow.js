@@ -1,18 +1,21 @@
-import React from 'react'
-import socket from '../api/films.js'
+import React, { useState } from "react";
+import socket from "../api/films.js";
 
 const ReadOnlyRow = ({ film, handleEditClick, deleteByID }) => {
   React.useEffect(() => {
-    socket.on('DELETE-res', (msg) => {
-      deleteByID(film.film_id);
-    })
-  }, [])
+    socket.on("DELETE-res", (msg) => {
+      if (msg === film.film_id) deleteByID(msg);
+      console.log("abc");
+    });
+  }, []);
 
-  function handleDelete() {
+  function handleDelete(e) {
+    e.preventDefault();
     const payload = {
-      film_id: film.film_id
-    }
-    socket.emit("DELETE", payload)
+      film_id: film.film_id,
+    };
+    socket.emit("DELETE", payload);
+    console.log("delete");
   }
 
   return (
@@ -22,11 +25,24 @@ const ReadOnlyRow = ({ film, handleEditClick, deleteByID }) => {
       <td>{film.language_id}</td>
       <td>{film.release_year}</td>
       <td>
-        <button className='btn btn-success mr-3' onClick={(event) => handleEditClick(event, film)}>Edit</button>
-        <button className='btn btn-danger' onClick={() => { handleDelete() }} style={{ margin: '10px' }} >Delete</button>
+        <button
+          className="btn btn-success mr-3"
+          onClick={(event) => handleEditClick(event, film)}
+        >
+          Edit
+        </button>
+        <button
+          className="btn btn-danger"
+          onClick={(e) => {
+            handleDelete(e, film);
+          }}
+          style={{ margin: "10px" }}
+        >
+          Delete
+        </button>
       </td>
     </tr>
-  )
-}
+  );
+};
 
-export default ReadOnlyRow
+export default ReadOnlyRow;

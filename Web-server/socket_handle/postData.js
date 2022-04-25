@@ -9,7 +9,7 @@ function generateUuid() {
 }
 
 export default function (io, socketID, payload) {
-  rabbitmq("", { exclusive: true })
+  rabbitmq("POST", { durable: false, autoDelete: true })
     .then(async (value) => {
       const { channel, queue } = value;
       var correlationId = generateUuid();
@@ -25,14 +25,14 @@ export default function (io, socketID, payload) {
             const data = JSON.parse(msg.content);
             io.to(socketID).emit("POST-res", data);
             // setTimeout(function () {
-            //   channel.close();
+            channel.close();
             //   process.exit(0);
             // }, 500);
           }
+        },
+        {
+          noAck: true,
         }
-        // {
-        //   noAck: true,
-        // }
       );
       channel.sendToQueue(
         "rpc_queue",
