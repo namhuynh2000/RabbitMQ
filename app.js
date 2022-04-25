@@ -1,7 +1,7 @@
 import rabbitmq from "./connection/rabbitmq/amqp.js";
 import CRUD from "./model/film.model.js";
 
-rabbitmq("rpc_queue", { durable: false })
+rabbitmq("rpc_queue", { durable: false, exclusive: true })
   .then(async (value) => {
     const { channel, queue } = value;
     console.log("connected to rabbitmq");
@@ -13,6 +13,7 @@ rabbitmq("rpc_queue", { durable: false })
       var { type } = req;
       console.log("type: ", type);
       let data;
+      let result;
       switch (type) {
         case "create":
           data = await CRUD().Create(req.entity);
@@ -21,10 +22,12 @@ rabbitmq("rpc_queue", { durable: false })
           data = await CRUD().Read();
           break;
         case "update":
-          data = await CRUD().Update(req.film_id, req.entity);
+          result = await CRUD().Update(req.film_id, req.entity);
+          data = { affected: result };
           break;
         case "delete":
-          data = await CRUD().Delete(req.film_id);
+          result = await CRUD().Delete(req.film_id);
+          data = { affected: result };
           break;
         default:
           throw new Error("No valid type");
