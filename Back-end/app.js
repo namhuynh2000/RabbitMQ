@@ -1,7 +1,7 @@
 import rabbitmq from "./connection/rabbitmq/amqp.js";
 import CRUD from "./model/film.model.js";
 
-rabbitmq("rpc_queue", { durable: false, exclusive: true })
+rabbitmq("rpc_queue", { durable: false, exclusive: false })
   .then(async (value) => {
     const { channel, queue } = value;
     console.log("connected to rabbitmq");
