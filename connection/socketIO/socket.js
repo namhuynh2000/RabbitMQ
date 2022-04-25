@@ -8,5 +8,7 @@ export function connect(app) {
       origin: "*",
     },
   });
+
+  console.log("Connected to SocketIO");
   return { io, httpServer };
 }

@@ -4,7 +4,9 @@ import express from "express";
 import morgan from "morgan"; // Dung de log
 import { connect } from "./connection/socketIO/socket.js";
 import getData from "./socket_handle/getData.js";
-
+import postData from "./socket_handle/postData.js";
+import deleteData from "./socket_handle/deleteData.js";
+import updateData from "./socket_handle/updateData.js";
 const port = 5500;
 
 const app = express();
@@ -21,6 +23,19 @@ io.on("connection", (socket) => {
 
   socket.on("GET", () => {
     getData(io, socket.id);
+  });
+
+  socket.on("POST", (payload) => {
+    postData(io, socket.id, payload);
+    console.log(payload);
+  });
+
+  socket.on("DELETE", (payload) => {
+    deleteData(io, socket.id, payload);
+  });
+
+  socket.on("UPDATE", (payload) => {
+    updateData(io, socket.id, payload);
   });
 });
 
