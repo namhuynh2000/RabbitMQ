@@ -2,25 +2,30 @@ import React, {useEffect, useState} from 'react'
 import AddFilm from './AddFilm'
 import Table from './Table'
 import Header from './Header'
-import api from '../api/films'
+import socket from '../api/films'
+
 
 const Home = () => {
   const [films, setFilm] = useState([]);
 
-  const retriveFilms = async ()=> // Lấy data kiểu api thông thường, k biết lấy = rabbit :(
+  /*const retriveFilms = async ()=> // Lấy data kiểu api thông thường, k biết lấy = rabbit :(
   {
     const response =await api.get("/films");
     return response.data;
-  };
+  };*/
 
   useEffect(()=>
   {
-    const getAllFilms = async () =>{
+    socket.on("GET-res", data =>{
+      setFilm(data)
+    });
+    socket.emit("GET");
+    /*const getAllFilms = async () =>{
       const allFilms = await retriveFilms();
       if (allFilms) setFilm(allFilms);
     }
 
-    getAllFilms(); 
+    getAllFilms(); */
   },[]);
 
   return (

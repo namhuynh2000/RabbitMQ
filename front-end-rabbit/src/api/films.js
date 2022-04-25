@@ -1,5 +1,5 @@
-import axios from 'axios';
+import io from 'socket.io-client'
 
-export default axios.create({
-    baseURL: "http://localhost:3006/",
-});
+const socket= io('http://localhost:5500')
+
+export default socket
