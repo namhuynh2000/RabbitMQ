@@ -3,7 +3,8 @@ import database from "../connection/database/db.js";
 export default function CRUD() {
   return {
     async Create(entity) {
-      return await database("film").insert(entity);
+      const result = await database("film").insert(entity);
+      return result;
     },
 
     async Read() {
@@ -12,7 +13,6 @@ export default function CRUD() {
 
     async Update(id, entity) {
       const result = await database("film").where("film_id", id).update(entity);
-
       if (result !== 0) return id;
       else return -1;
     },

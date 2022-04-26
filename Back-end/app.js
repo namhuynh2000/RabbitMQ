@@ -23,7 +23,6 @@ rabbitmq("rpc_queue", { exclusive: true })
           break;
         case "update":
           data = await CRUD().Update(req.film_id, req.entity);
-
           break;
         case "delete":
           data = await CRUD().Delete(req.film_id);

@@ -21,7 +21,7 @@ const ReadOnlyRow = ({ film, handleEditClick, deleteByID }) => {
   }
 
   return (
-    <tr>
+    <tr style={{verticalAlign: "middle"}}>
       <td>{film.film_id}</td>
       <td>{film.title}</td>
       <td>{film.language_id}</td>

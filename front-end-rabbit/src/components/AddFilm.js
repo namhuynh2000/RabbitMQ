@@ -7,9 +7,17 @@ const AddFilm = ({ films, setFilm, handleUpdate }) => {
   React.useEffect(() => {
     socket.on("POST-res", (msg) => {
       const id = msg[0];
-
+      console.log(id);
       const newData = { ...dataForm, film_id: id };
       handleUpdate(newData);
+      document.querySelector("#title").value = '';
+      document.querySelector("#language").value = '';
+      document.querySelector("#year").value = '';
+      setTimeout(() => {
+        const scrollingElement = (document.scrollingElement || document.body);
+        scrollingElement.scroll({ behavior: "smooth", top: scrollingElement.scrollHeight })
+      }, 1000)
+
     });
   }, [dataForm]);
 
@@ -30,6 +38,8 @@ const AddFilm = ({ films, setFilm, handleUpdate }) => {
     };
     setDataForm(dataForm.entity);
     socket.emit("POST", dataForm);
+
+
   };
 
   return (
