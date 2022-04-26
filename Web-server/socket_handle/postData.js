@@ -9,7 +9,7 @@ function generateUuid() {
 }
 
 export default function (io, socketID, payload) {
-  rabbitmq("POST", { durable: false, autoDelete: true })
+  rabbitmq("", { durable: false, autoDelete: true })
     .then(async (value) => {
       const { channel, queue } = value;
       var correlationId = generateUuid();
