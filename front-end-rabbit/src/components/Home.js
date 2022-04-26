@@ -29,18 +29,21 @@ const Home = () => {
   }
 
   function deleteByID(id) {
-    console.log(id);
-    console.log(films);
+    const copyArr = [...films];
 
-    const index = films.findIndex((data) => data.film_id === id);
-    console.log(index);
-    if (index === -1) return;
-    const updateFilms = films.filter((film) => film.film_id !== id);
-    console.log(updateFilms);
-    setFilm(updateFilms);
+    // console.log(copyArr);
+    const index = copyArr.findIndex((data) => data.film_id === id);
+    // console.log(index);
+    // if (index === -1) return;
+    // const updateFilms = copyArr.filter((film) => film.film_id !== id);
+    copyArr.splice(index, 1);
+    // console.log(copyArr);
+    setFilm(copyArr);
   }
 
-  // function fetchData() {}
+  // useEffect(() => {
+  //   console.log(films);
+  // }, [films]);
 
   useEffect(() => {
     socket.on("GET-res", (data) => {
@@ -49,6 +52,7 @@ const Home = () => {
     });
 
     //
+    console.log("fetching...");
 
     socket.emit("GET");
 

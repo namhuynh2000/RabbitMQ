@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import socket from "../api/films.js";
 
 const ReadOnlyRow = ({ film, handleEditClick, deleteByID }) => {
+  const [flag, setFlag] = useState(false);
+
   React.useEffect(() => {
     socket.on("DELETE-res", (msg) => {
       if (msg === film.film_id) deleteByID(msg);
-      console.log("abc");
     });
-  }, []);
+  }, [flag]);
 
   function handleDelete(e) {
     e.preventDefault();
@@ -15,6 +16,7 @@ const ReadOnlyRow = ({ film, handleEditClick, deleteByID }) => {
       film_id: film.film_id,
     };
     socket.emit("DELETE", payload);
+    setFlag(true);
     console.log("delete");
   }
 
